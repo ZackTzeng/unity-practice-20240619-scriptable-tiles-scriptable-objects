@@ -6,21 +6,21 @@ using UnityEngine.Tilemaps;
 public class Level : MonoBehaviour
 {
     private Grid grid;
-    [SerializeField] private Unit unit;
+    // [SerializeField] private Unit unit;
     private Unit activeUnit;
+    [SerializeField] private GameObject unitPrefab;
     [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] Tilemap tilemap;
     private void Start()
     {
         grid = GetComponent<Grid>();
-        unit.Move(GetTileCenterWorldPosition(unit.transform.position));
-        Debug.Log($"Unit name: {unit.name}");
     }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Unit selectedUnit = SelectUnit();
+            Debug.Log($"Selected unit: {selectedUnit}");
             if (selectedUnit != null)
             {
                 if (activeUnit == null)
@@ -77,5 +77,12 @@ public class Level : MonoBehaviour
             return selectedUnit;
         }
         return null;
+    }
+
+    public void SpawnUnit()
+    {
+        GameObject unitGameObject = Instantiate(unitPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        Unit unit = unitGameObject.GetComponent<Unit>();
+        unit.Move(GetTileCenterWorldPosition(unit.transform.position));
     }
 }

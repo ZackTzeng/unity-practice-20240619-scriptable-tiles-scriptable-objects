@@ -10,12 +10,17 @@ public class Unit : MonoBehaviour
     private Vector2 targetPosition;
     private void Start() {
         Deselect();
+        UpdateUnitPosition();
     }
     public void Move(Vector2 targetPosition)
     {
         this.targetPosition = targetPosition;
     }
     private void Update() {
+        UpdateUnitPosition();
+    }
+    private void UpdateUnitPosition()
+    {
         if (transform.position != (Vector3)targetPosition)
         {
             transform.position = (Vector3)targetPosition;

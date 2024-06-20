@@ -122,63 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &481460344
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2026298055353463045, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_Name
-      value: Unit
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3594790954538137100, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fe0c3523306c048e0b214eb097329475, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,17 +341,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1271452613 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6171829997657070918, guid: fe0c3523306c048e0b214eb097329475, type: 3}
-  m_PrefabInstance: {fileID: 481460344}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9144433aa1fb34bdbafaa1c66f55df5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1473341683
 GameObject:
   m_ObjectHideFlags: 0
@@ -2906,11 +2838,23 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 04bc520d7e50942758c7742401fa5fd1, type: 2}
   - m_RefCount: 120
     m_Data: {fileID: 11400000, guid: bc98deab177b74a339f05dd6563b8d29, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 120
     m_Data: {fileID: 156176883, guid: 04b3eb92fa6e24a37b58180d3d72d8b1, type: 3}
   - m_RefCount: 120
     m_Data: {fileID: 962484002, guid: 04b3eb92fa6e24a37b58180d3d72d8b1, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileMatrixArray:
   - m_RefCount: 240
     m_Data:
@@ -3015,7 +2959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569b78c764fd74b47b01fe8f2607b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 1271452613}
+  unitPrefab: {fileID: 2026298055353463045, guid: fe0c3523306c048e0b214eb097329475, type: 3}
   unitLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -3027,4 +2971,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1975222605}
-  - {fileID: 481460344}
