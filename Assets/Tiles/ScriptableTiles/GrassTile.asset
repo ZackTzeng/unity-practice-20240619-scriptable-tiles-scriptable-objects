@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GrassTile
   m_EditorClassIdentifier: 
   tileSprite: {fileID: -1554440789, guid: 04b3eb92fa6e24a37b58180d3d72d8b1, type: 3}
-  showTranslucency: 0
+  showTranslucency: 1
   defaultColor: {r: 1, g: 1, b: 1, a: 1}

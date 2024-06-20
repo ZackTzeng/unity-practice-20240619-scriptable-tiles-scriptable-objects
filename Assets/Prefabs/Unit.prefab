@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9144433aa1fb34bdbafaa1c66f55df5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementRange: 1
+  movementRange: 2
   idleVisual: {fileID: 7911180390848627029}
   selectedVisual: {fileID: 48319434841354578}
 --- !u!61 &4515351972566887960
