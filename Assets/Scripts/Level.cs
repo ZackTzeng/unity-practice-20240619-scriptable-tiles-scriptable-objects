@@ -37,12 +37,16 @@ public class Level : MonoBehaviour
                 }
                 else if (activeUnit != selectedUnit)
                 {
+                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, false);
                     activeUnit.Deselect();
                     activeUnit = selectedUnit;
                     activeUnit.Select();
+                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, true);
+
                 }
                 else // activeUnit already is the selected unit
                 {
+                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, false);
                     activeUnit.Deselect();
                     activeUnit = null;
                 }

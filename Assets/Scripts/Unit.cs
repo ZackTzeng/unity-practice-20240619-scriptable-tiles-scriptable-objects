@@ -42,13 +42,10 @@ public class Unit : MonoBehaviour
     {
         idleVisual.enabled = false;
         selectedVisual.enabled = true;
-        level.SetMovableCellsTranslucency(this, gridPosition, true);
-
     }
 
     public void Deselect()
     {
-        level.SetMovableCellsTranslucency(this, gridPosition, false);
         idleVisual.enabled = true;
         selectedVisual.enabled = false;
     }
