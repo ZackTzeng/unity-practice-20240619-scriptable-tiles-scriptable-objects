@@ -59,4 +59,9 @@ public struct GridPosition
     {
         return new Vector3Int(x, y, 0);
     }
+
+    public override string ToString()
+    {
+        return $"({x}, {y})";
+    }
 }

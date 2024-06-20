@@ -5,7 +5,6 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private GridPosition gridPosition;
-    private CustomTilemapTile tile;
     private Level level;
     [SerializeField] private int movementRange;
     [SerializeField] private SpriteRenderer idleVisual;
@@ -14,23 +13,14 @@ public class Unit : MonoBehaviour
     public void Spawn(Level level, CustomTilemapTile tile, GridPosition gridPosition)
     {
         this.level = level;
-        this.tile = tile;
         this.gridPosition = gridPosition;
-        idleVisual.enabled = false;
-        selectedVisual.enabled = true;
-    }
-    public void SetTile(CustomTilemapTile tile)
-    {
-        this.tile = tile;
+        idleVisual.enabled = true;
+        selectedVisual.enabled = false;
     }
     public void Move(GridPosition targetGridPosition)
     {
         gridPosition = targetGridPosition;
     }
-    // public void Move(WorldPosition targetPosition)
-    // {
-    //     this.targetPosition = targetPosition;
-    // }
     private void Update()
     {
         UpdateUnitPosition();
@@ -48,15 +38,6 @@ public class Unit : MonoBehaviour
             transform.position = level.GetWorldPosition(gridPosition).GetWorldPositionVector3();
         }
     }
-    // private void UpdateUnitPosition()
-    // {
-    //     Vector3 currentTransformPosition = transform.position;
-    //     GridPosition currentGridPosition = new(level.GetGridPosition(currentTransformPosition));
-    //     if (currentGridPosition != gridPosition)
-    //     {
-    //         transform.position = level.GetWorldPosition(gridPosition).GetWorldPositionVector3();
-    //     }
-    // }
     public void Select()
     {
         idleVisual.enabled = false;
@@ -81,19 +62,10 @@ public class Unit : MonoBehaviour
         return gridPosition;
     }
 
-    // public Vector3Int GetGridPosition()
-    // {
-    //     return gridPosition;
-    // }
-
     public void SetGridPosition(GridPosition gridPosition)
     {
         this.gridPosition = gridPosition;
     }
-    // public void SetGridPosition(Vector3Int gridPosition)
-    // {
-    //     this.gridPosition = gridPosition;
-    // }
     public void SetLevel(Level level)
     {
         this.level = level;

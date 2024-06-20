@@ -49,9 +49,6 @@ public struct WorldPosition
         return base.GetHashCode();
     }
 
-    // 'WorldPosition' defines operator == or operator != but does not override Object.Equals(object o)
-
-
     public static WorldPosition operator +(WorldPosition a, WorldPosition b)
     {
         return new WorldPosition(a.x + b.x, a.y + b.y);
