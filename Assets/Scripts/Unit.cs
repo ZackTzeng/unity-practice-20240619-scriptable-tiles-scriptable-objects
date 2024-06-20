@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private SpriteRenderer idleVisual;
     [SerializeField] private SpriteRenderer selectedVisual;
 
-    public void Spawn(Level level, CustomTilemapTile tile, GridPosition gridPosition)
+    public void Spawn(Level level, GridPosition gridPosition)
     {
         this.level = level;
         this.gridPosition = gridPosition;

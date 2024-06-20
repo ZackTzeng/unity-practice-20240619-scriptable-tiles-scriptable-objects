@@ -23,21 +23,23 @@ public class Level : MonoBehaviour
 
             GridPosition mousePositionGridPosition = GetGridPosition(GetMouseWorldPosition());
             Unit selectedUnit = SelectUnit();
-            Debug.Log($"Active unit: {activeUnit}");
-            Debug.Log($"Selected unit: {selectedUnit}");
             if (selectedUnit != null)
             {
 
                 if (activeUnit == null)
                 {
-                    Debug.Log("Selected a unit but no current active unit");
                     activeUnit = selectedUnit;
                     activeUnit.Select();
                     SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, true);
                 }
                 else if (activeUnit != selectedUnit)
                 {
-                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, false);
+                    List<GridPosition> testMovableCells = GetMovableCells(activeUnit.GetGridPosition(), activeUnit.GetMovementRange());
+                    foreach (GridPosition testMovableCell in testMovableCells)
+                    {
+                        Debug.Log($"Test movable cell: {testMovableCell}");
+                    }
+                    SetMovableCellsTranslucency(activeUnit, activeUnit.GetGridPosition(), false);
                     activeUnit.Deselect();
                     activeUnit = selectedUnit;
                     activeUnit.Select();
@@ -93,7 +95,6 @@ public class Level : MonoBehaviour
     public Vector2 GetWorldPosition(Vector3Int gridPosition)
     {
         Vector2 worldPosition = grid.GetCellCenterWorld(gridPosition);
-        Debug.Log($"World position: {worldPosition}");
         return worldPosition;
     }
 
@@ -127,21 +128,20 @@ public class Level : MonoBehaviour
     {
         GridPosition spawnPosition = new(0, 0);
         WorldPosition spawnPositionWorldPosition = GetWorldPosition(spawnPosition);
-        Debug.Log($"Spawn position world position: {spawnPositionWorldPosition}");
         Vector3Int spawnPositionVector3Int = spawnPosition.GetGridPositionVector3Int();
 
         GameObject unitGameObject = Instantiate(
-            unitPrefab, 
-            spawnPositionWorldPosition.GetWorldPositionVector3(), 
+            unitPrefab,
+            spawnPositionWorldPosition.GetWorldPositionVector3(),
             Quaternion.identity
         );
 
         Unit unit = unitGameObject.GetComponent<Unit>();
-        unit.Spawn(this, (CustomTilemapTile)tilemap.GetTile(spawnPositionVector3Int), spawnPosition);
+        unit.Spawn(this, spawnPosition);
         SetUnitOnGridPosition(spawnPosition, unit);
     }
 
-    public void UpdateTileTranslucency(Boolean showTranslucency, GridPosition tilemapPosition)
+    public void UpdateTileTranslucency(bool showTranslucency, GridPosition tilemapPosition)
     {
         Vector3Int tilemapPositionVector3Int = tilemapPosition.GetGridPositionVector3Int();
         TileBase tile = tilemap.GetTile(tilemapPositionVector3Int);
@@ -165,7 +165,7 @@ public class Level : MonoBehaviour
         List<GridPosition> movableCells = GetMovableCells(gridPosition, unit.GetMovementRange());
         foreach (GridPosition movableCell in movableCells)
         {
-            Debug.Log($"Movable cell: {movableCell}");
+            Debug.Log($"grid position: {gridPosition}, movable cell: {movableCell}");
             UpdateTileTranslucency(showTranslucency, movableCell);
         }
     }
@@ -196,11 +196,17 @@ public class Level : MonoBehaviour
                 {
                     if (!movableCells.Contains(direction))
                     {
-                        if (!HasAnyUnitOnGridPosition(direction) || GetUnitOnGridPosition(direction) == activeUnit)
-                        {
-                            movableCells.Add(direction);
-                            queue.Enqueue(direction);
-                        }
+                        movableCells.Add(direction);
+                        queue.Enqueue(direction);
+                        // if (!HasAnyUnitOnGridPosition(direction) || GetUnitOnGridPosition(direction) == activeUnit)
+                        // {
+                        //     movableCells.Add(direction);
+                        //     queue.Enqueue(direction);
+                        // }
+                        // else
+                        // {
+                        //     Debug.Log($"Unit on grid position: {direction}");
+                        // }
                     }
                 }
             }
@@ -251,7 +257,7 @@ public class Level : MonoBehaviour
         SetMovableCellsTranslucency(unit, unit.GetGridPosition(), false);
         ClearUnitOnGridPosition(unit.GetGridPosition());
         unit.Move(targetGridPosition);
-        SetMovableCellsTranslucency(unit, unit.GetGridPosition(), true);
+        SetMovableCellsTranslucency(unit, targetGridPosition, true);
         SetUnitOnGridPosition(targetGridPosition, unit);
     }
 }
