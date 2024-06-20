@@ -30,25 +30,20 @@ public class Level : MonoBehaviour
                 {
                     activeUnit = selectedUnit;
                     activeUnit.Select();
-                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, true);
+                    HighlightMovableCellsForUnit(activeUnit);
                 }
                 else if (activeUnit != selectedUnit)
                 {
-                    List<GridPosition> testMovableCells = GetMovableCells(activeUnit.GetGridPosition(), activeUnit.GetMovementRange());
-                    foreach (GridPosition testMovableCell in testMovableCells)
-                    {
-                        Debug.Log($"Test movable cell: {testMovableCell}");
-                    }
-                    SetMovableCellsTranslucency(activeUnit, activeUnit.GetGridPosition(), false);
+                    UnhighlightMovableCellsForUnit(activeUnit);
                     activeUnit.Deselect();
                     activeUnit = selectedUnit;
                     activeUnit.Select();
-                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, true);
+                    HighlightMovableCellsForUnit(activeUnit);
 
                 }
                 else // activeUnit already is the selected unit
                 {
-                    SetMovableCellsTranslucency(activeUnit, mousePositionGridPosition, false);
+                    UnhighlightMovableCellsForUnit(activeUnit);
                     activeUnit.Deselect();
                     activeUnit = null;
                 }
@@ -74,6 +69,19 @@ public class Level : MonoBehaviour
         Vector3Int gridPositionVector3Int = grid.WorldToCell(worldPositionVector3);
         GridPosition gridPosition = new(gridPositionVector3Int);
         return gridPosition;
+    }
+
+    public void HighlightMovableCellsForUnit(Unit unit)
+    {
+        GridPosition unitGridPosition = unit.GetGridPosition();
+        SetMovableCellsTranslucency(unit, unitGridPosition, true);
+
+    }
+
+    public void UnhighlightMovableCellsForUnit(Unit unit)
+    {
+        GridPosition unitGridPosition = unit.GetGridPosition();
+        SetMovableCellsTranslucency(unit, unitGridPosition, false);
     }
 
     public WorldPosition GetMouseWorldPosition()
@@ -165,7 +173,6 @@ public class Level : MonoBehaviour
         List<GridPosition> movableCells = GetMovableCells(gridPosition, unit.GetMovementRange());
         foreach (GridPosition movableCell in movableCells)
         {
-            Debug.Log($"grid position: {gridPosition}, movable cell: {movableCell}");
             UpdateTileTranslucency(showTranslucency, movableCell);
         }
     }
@@ -254,10 +261,10 @@ public class Level : MonoBehaviour
 
     public void MoveUnit(Unit unit, GridPosition targetGridPosition)
     {
-        SetMovableCellsTranslucency(unit, unit.GetGridPosition(), false);
+        UnhighlightMovableCellsForUnit(unit);
         ClearUnitOnGridPosition(unit.GetGridPosition());
         unit.Move(targetGridPosition);
-        SetMovableCellsTranslucency(unit, targetGridPosition, true);
+        HighlightMovableCellsForUnit(unit);
         SetUnitOnGridPosition(targetGridPosition, unit);
     }
 }
