@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,6 @@ public class Level : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Unit selectedUnit = SelectUnit();
-            Debug.Log($"Selected unit: {selectedUnit}");
             if (selectedUnit != null)
             {
                 if (activeUnit == null)
@@ -33,7 +33,8 @@ public class Level : MonoBehaviour
                     activeUnit.Deselect();
                     activeUnit = selectedUnit;
                     activeUnit.Select();
-                } else // activeUnit already is the selected unit
+                }
+                else // activeUnit already is the selected unit
                 {
                     activeUnit.Deselect();
                     activeUnit = null;
@@ -44,6 +45,12 @@ public class Level : MonoBehaviour
                 if (activeUnit != null)
                 {
                     activeUnit.Move(GetTileCenterWorldPosition(GetMouseWorldPosition()));
+                }
+                else
+                {
+                    
+                    CustomTilemapTile tile = (CustomTilemapTile)tilemap.GetTile(GetGridPosition(GetMouseWorldPosition()));
+                    UpdateTileTranslucency(!tile.GetTranslucency(), GetGridPosition(GetMouseWorldPosition()));
                 }
             }
 
@@ -72,7 +79,6 @@ public class Level : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(GetMouseWorldPosition(), Vector2.zero, Mathf.Infinity, unitLayerMask);
         if (hit.collider != null)
         {
-            Debug.Log($"Unit selected {hit.collider.gameObject.name}");
             Unit selectedUnit = hit.collider.GetComponent<Unit>();
             return selectedUnit;
         }
@@ -84,5 +90,22 @@ public class Level : MonoBehaviour
         GameObject unitGameObject = Instantiate(unitPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         Unit unit = unitGameObject.GetComponent<Unit>();
         unit.Move(GetTileCenterWorldPosition(unit.transform.position));
+    }
+
+    public void UpdateTileTranslucency(Boolean showTranslucency, Vector3Int tilemapPosition)
+    {
+        TileBase tile = tilemap.GetTile(tilemapPosition);
+
+        if (tile != null && tile is CustomTilemapTile tile1)
+        {
+            CustomTilemapTile customTile = tile1;
+
+            // Toggle the translucency
+            customTile.SetTranslucency(showTranslucency);
+
+            // Set the tile back to the tilemap to apply changes
+            tilemap.SetTile(tilemapPosition, null); // Clear the tile first
+            tilemap.SetTile(tilemapPosition, customTile); // Set the modified tile
+        }
     }
 }
