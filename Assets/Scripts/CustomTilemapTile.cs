@@ -16,16 +16,17 @@ public class CustomTilemapTile : TileBase
     {
         tileData.sprite = tileSprite;
         tileData.colliderType = Tile.ColliderType.Grid;
-        tileData.color = Color.white;
+        // tileData.color = Color.white;
         tileData.flags = TileFlags.None;
 
         if (showTranslucency)
         {
-            tileData.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.5f);
+            tileData.color = new Color(Color.white.r, Color.white.g, Color.white.b, 0.8f);
         }
         else
         {
-            tileData.color = defaultColor;
+            // tileData.color = defaultColor;
+            tileData.color = Color.white;
         }
     }
 

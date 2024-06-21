@@ -16,4 +16,4 @@ MonoBehaviour:
   tileType: 0
   isWalkable: 1
   showTranslucency: 1
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultColor: {r: 0.19185255, g: 0.49056602, b: 0.14115341, a: 1}
