@@ -2959,6 +2959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569b78c764fd74b47b01fe8f2607b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 1975222604}
   unitPrefab: {fileID: 2026298055353463045, guid: fe0c3523306c048e0b214eb097329475, type: 3}
   unitLayerMask:
     serializedVersion: 2

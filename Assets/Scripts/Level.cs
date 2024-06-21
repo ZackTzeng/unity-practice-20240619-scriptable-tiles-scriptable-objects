@@ -6,21 +6,32 @@ using UnityEngine.Tilemaps;
 
 public class Level : MonoBehaviour
 {
-    private Grid grid;
+    [SerializeField] private Grid grid;
     // [SerializeField] private Unit unit;
     private Unit activeUnit;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] Tilemap tilemap;
+    private Dictionary<GridPosition, TileObject> tileObjectDictionary;
     private void Start()
     {
         grid = GetComponent<Grid>();
+        InitializeTileObjectDictionary();
+    }
+    private void InitializeTileObjectDictionary()
+    {
+        tileObjectDictionary = new Dictionary<GridPosition, TileObject>();
+        BoundsInt bounds = tilemap.cellBounds;
+        foreach (Vector3Int position in bounds.allPositionsWithin)
+        {
+            GridPosition gridPosition = new GridPosition(position);
+            tileObjectDictionary[gridPosition] = new TileObject();
+        }
     }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-
             GridPosition mousePositionGridPosition = GetGridPosition(GetMouseWorldPosition());
             Unit selectedUnit = SelectUnit();
             if (selectedUnit != null)
@@ -55,11 +66,8 @@ public class Level : MonoBehaviour
                     MoveUnit(activeUnit, mousePositionGridPosition);
                 }
                 else // with no active unit
-                {
-                    Debug.Log("No unit selected");
-                }
+                { }
             }
-
         }
     }
 
@@ -136,7 +144,6 @@ public class Level : MonoBehaviour
     {
         GridPosition spawnPosition = new(0, 0);
         WorldPosition spawnPositionWorldPosition = GetWorldPosition(spawnPosition);
-        Vector3Int spawnPositionVector3Int = spawnPosition.GetGridPositionVector3Int();
 
         GameObject unitGameObject = Instantiate(
             unitPrefab,
@@ -146,7 +153,7 @@ public class Level : MonoBehaviour
 
         Unit unit = unitGameObject.GetComponent<Unit>();
         unit.Spawn(this, spawnPosition);
-        SetUnitOnGridPosition(spawnPosition, unit);
+        SetUnitOnCell(spawnPosition, unit);
     }
 
     public void UpdateTileTranslucency(bool showTranslucency, GridPosition tilemapPosition)
@@ -203,17 +210,13 @@ public class Level : MonoBehaviour
                 {
                     if (!movableCells.Contains(direction))
                     {
-                        movableCells.Add(direction);
-                        queue.Enqueue(direction);
-                        // if (!HasAnyUnitOnGridPosition(direction) || GetUnitOnGridPosition(direction) == activeUnit)
-                        // {
-                        //     movableCells.Add(direction);
-                        //     queue.Enqueue(direction);
-                        // }
-                        // else
-                        // {
-                        //     Debug.Log($"Unit on grid position: {direction}");
-                        // }
+                        if (!HasAnyUnitOnGridPosition(direction))
+                        {
+                            movableCells.Add(direction);
+                            queue.Enqueue(direction);
+                        }
+
+
                     }
                 }
             }
@@ -224,47 +227,31 @@ public class Level : MonoBehaviour
 
     public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
     {
-        Vector3Int gridPositionVector3Int = gridPosition.GetGridPositionVector3Int();
-        TileBase tile = tilemap.GetTile(gridPositionVector3Int);
-        if (tile is CustomTilemapTile customTile)
-        {
-            return customTile.HasUnit();
-        }
-        return false;
+        return tileObjectDictionary[gridPosition].HasUnit();
     }
 
-    public Unit GetUnitOnGridPosition(GridPosition gridPosition)
+    public Unit GetUnitOnCellByGridPosition(GridPosition gridPosition)
     {
-        Vector3Int gridPositionVector3Int = gridPosition.GetGridPositionVector3Int();
-        TileBase tile = tilemap.GetTile(gridPositionVector3Int);
-        if (tile is CustomTilemapTile customTile)
-        {
-            return customTile.GetUnit();
-        }
-        return null;
+        return tileObjectDictionary[gridPosition].GetUnit();
     }
 
-    public void SetUnitOnGridPosition(GridPosition gridPosition, Unit unit)
+    public void SetUnitOnCell(GridPosition cellGridPosition, Unit unit)
     {
-        Vector3Int gridPositionVector3Int = gridPosition.GetGridPositionVector3Int();
-        TileBase tile = tilemap.GetTile(gridPositionVector3Int);
-        if (tile is CustomTilemapTile customTile)
-        {
-            customTile.SetUnit(unit);
-        }
+        tileObjectDictionary[cellGridPosition].SetUnit(unit);
     }
 
-    public void ClearUnitOnGridPosition(GridPosition gridPosition)
+    public void ClearUnitOnCell(GridPosition gridPosition)
     {
-        SetUnitOnGridPosition(gridPosition, null);
+        tileObjectDictionary[gridPosition].SetUnit(null);
     }
 
     public void MoveUnit(Unit unit, GridPosition targetGridPosition)
     {
         UnhighlightMovableCellsForUnit(unit);
-        ClearUnitOnGridPosition(unit.GetGridPosition());
+        // Debug.Log($"Moving unit from {unit.GetGridPosition()} to {targetGridPosition}");
+        ClearUnitOnCell(unit.GetGridPosition());
         unit.Move(targetGridPosition);
         HighlightMovableCellsForUnit(unit);
-        SetUnitOnGridPosition(targetGridPosition, unit);
+        SetUnitOnCell(targetGridPosition, unit);
     }
 }
