@@ -59,11 +59,21 @@ public class Level : MonoBehaviour
                     activeUnit = null;
                 }
             }
-            else // no unit selected
+            else // no unit selected thus selecting a tile
             {
                 if (activeUnit != null) // with an active unit
                 {
-                    MoveUnit(activeUnit, mousePositionGridPosition);
+                    List<GridPosition> movableCells = GetMovableCells(activeUnit.GetGridPosition(), activeUnit.GetMovementRange());
+                    if (movableCells.Contains(mousePositionGridPosition))
+                    {
+                        MoveUnit(activeUnit, mousePositionGridPosition);
+                    }
+                    else
+                    {
+                        UnhighlightMovableCellsForUnit(activeUnit);
+                        activeUnit.Deselect();
+                        activeUnit = null;
+                    }
                 }
                 else // with no active unit
                 { }
@@ -210,18 +220,22 @@ public class Level : MonoBehaviour
                 {
                     if (!movableCells.Contains(direction))
                     {
-                        if (!HasAnyUnitOnGridPosition(direction))
+                        TileBase tile = tilemap.GetTile(direction.GetGridPositionVector3Int());
+                        if (tile is CustomTilemapTile customTilemapTile)
                         {
-                            movableCells.Add(direction);
-                            queue.Enqueue(direction);
+                            if (
+                            !HasAnyUnitOnGridPosition(direction) &&
+                            customTilemapTile.IsWalkable()
+                        )
+                            {
+                                movableCells.Add(direction);
+                                queue.Enqueue(direction);
+                            }
                         }
-
-
                     }
                 }
             }
         }
-
         return new List<GridPosition>(movableCells);
     }
 
@@ -248,7 +262,6 @@ public class Level : MonoBehaviour
     public void MoveUnit(Unit unit, GridPosition targetGridPosition)
     {
         UnhighlightMovableCellsForUnit(unit);
-        // Debug.Log($"Moving unit from {unit.GetGridPosition()} to {targetGridPosition}");
         ClearUnitOnCell(unit.GetGridPosition());
         unit.Move(targetGridPosition);
         HighlightMovableCellsForUnit(unit);

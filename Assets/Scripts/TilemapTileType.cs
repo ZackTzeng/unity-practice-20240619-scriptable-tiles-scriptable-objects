@@ -5,5 +5,6 @@ public enum TilemapTileType
     Mountain,
     Forest,
     Desert,
-    Snow
+    Snow,
+    Boundary
 }

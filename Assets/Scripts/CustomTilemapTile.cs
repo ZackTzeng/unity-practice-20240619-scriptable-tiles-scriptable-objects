@@ -8,8 +8,9 @@ public class CustomTilemapTile : TileBase
 {
     // [SerializeField] private CustomTilemapTileSO customTilemapTileSO;
     [SerializeField] private Sprite tileSprite;
-    private Unit unit;
-    [SerializeField] public bool showTranslucency = false;
+    [SerializeField] private TilemapTileType tileType;
+    [SerializeField] private bool isWalkable;
+    [HideInInspector] public bool showTranslucency = false;
     [SerializeField] private Color defaultColor = Color.white;
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
     {
@@ -38,16 +39,8 @@ public class CustomTilemapTile : TileBase
         return showTranslucency;
     }
 
-    public void SetUnit(Unit unit)
+    public bool IsWalkable()
     {
-        this.unit = unit;
-    }
-    public Unit GetUnit()
-    {
-        return unit;
-    }
-    public bool HasUnit()
-    {
-        return unit != null;
+        return isWalkable;
     }
 }

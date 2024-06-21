@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 501bc3e8180844f3ba3ba5f9f44ba388, type: 3}
-  m_Name: GrassTile
+  m_Name: BoundaryTile
   m_EditorClassIdentifier: 
-  tileSprite: {fileID: -1554440789, guid: 04b3eb92fa6e24a37b58180d3d72d8b1, type: 3}
-  tileType: 0
-  isWalkable: 1
-  showTranslucency: 1
+  tileSprite: {fileID: 464799672, guid: 04b3eb92fa6e24a37b58180d3d72d8b1, type: 3}
+  tileType: 6
+  isWalkable: 0
+  showTranslucency: 0
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
