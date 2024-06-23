@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class Level : MonoBehaviour
     [SerializeField] private GameObject movementHighlightPrefab;
     [SerializeField] private GameObject attackHighlightPrefab;
     List<GameObject> movementHighlightGameObjectList;
+    [SerializeField] private Button spawnButton;
 
     // [SerializeField] private Unit unit;
     private Unit activeUnit;
@@ -22,6 +25,7 @@ public class Level : MonoBehaviour
         grid = GetComponent<Grid>();
         InitializeTileObjectDictionary();
         movementHighlightGameObjectList = new List<GameObject>();
+        spawnButton.onClick.AddListener(SpawnUnit);
     }
     private void InitializeTileObjectDictionary()
     {
