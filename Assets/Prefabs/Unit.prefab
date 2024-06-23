@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9144433aa1fb34bdbafaa1c66f55df5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attack: 1
+  health: 2
   movementRange: 2
   idleVisual: {fileID: 7911180390848627029}
   selectedVisual: {fileID: 48319434841354578}

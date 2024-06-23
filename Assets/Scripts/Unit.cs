@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public int attack = 1;
+    public int health = 4;
     private GridPosition gridPosition;
     private Level level;
     [SerializeField] private int movementRange;

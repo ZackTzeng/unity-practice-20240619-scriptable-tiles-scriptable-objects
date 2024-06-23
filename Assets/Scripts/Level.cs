@@ -7,6 +7,10 @@ using UnityEngine.Tilemaps;
 public class Level : MonoBehaviour
 {
     [SerializeField] private Grid grid;
+    [SerializeField] private GameObject movementHighlightPrefab;
+    [SerializeField] private GameObject attackHighlightPrefab;
+    List<GameObject> movementHighlightGameObjectList;
+
     // [SerializeField] private Unit unit;
     private Unit activeUnit;
     [SerializeField] private GameObject unitPrefab;
@@ -17,6 +21,7 @@ public class Level : MonoBehaviour
     {
         grid = GetComponent<Grid>();
         InitializeTileObjectDictionary();
+        movementHighlightGameObjectList = new List<GameObject>();
     }
     private void InitializeTileObjectDictionary()
     {
@@ -45,16 +50,20 @@ public class Level : MonoBehaviour
                 }
                 else if (activeUnit != selectedUnit)
                 {
-                    UnhighlightMovableCellsForUnit(activeUnit);
-                    activeUnit.Deselect();
-                    activeUnit = selectedUnit;
-                    activeUnit.Select();
-                    HighlightMovableCellsForUnit(activeUnit);
 
+                    if (!Attack(activeUnit, selectedUnit))
+                    {
+                        // UnhighlightMovableCellsForUnit(activeUnit);
+                        UnhighlightMovableCells();
+                        activeUnit.Deselect();
+                        activeUnit = selectedUnit;
+                        activeUnit.Select();
+                        HighlightMovableCellsForUnit(activeUnit);
+                    }
                 }
                 else // activeUnit already is the selected unit
                 {
-                    UnhighlightMovableCellsForUnit(activeUnit);
+                    UnhighlightMovableCells();
                     activeUnit.Deselect();
                     activeUnit = null;
                 }
@@ -70,7 +79,8 @@ public class Level : MonoBehaviour
                     }
                     else
                     {
-                        UnhighlightMovableCellsForUnit(activeUnit);
+                        // UnhighlightMovableCellsForUnit(activeUnit);
+                        UnhighlightMovableCells();
                         activeUnit.Deselect();
                         activeUnit = null;
                     }
@@ -81,6 +91,21 @@ public class Level : MonoBehaviour
         }
     }
 
+    public bool Attack(Unit attacker, Unit target)
+    {
+        // calculate the damage
+        target.health -= attacker.attack;
+        Debug.Log($"Unit {target.name} received {attacker.attack} damage. Remaining health: {target.health}");
+        if (target.health <= 0)
+        {
+            Debug.Log($"Unit {target.name} has been eliminated.");
+            // remove the target unit
+            ClearUnitOnCell(target.GetGridPosition());
+            Destroy(target.gameObject);
+            return true;
+        }
+        return false;
+    }
     public GridPosition GetGridPosition(WorldPosition worldPosition)
     {
         Vector3 worldPositionVector3 = worldPosition.GetWorldPositionVector3();
@@ -89,18 +114,37 @@ public class Level : MonoBehaviour
         return gridPosition;
     }
 
+    public void HighlightMovableCells(List<GridPosition> movableCellGridPositionList)
+    {
+        foreach (GridPosition movableCellGridPosition in movableCellGridPositionList)
+        {
+            Vector3 movableCellWorldPositionVector3 = GetWorldPosition(movableCellGridPosition).GetWorldPositionVector3();
+            GameObject movementHighlightGameObject = Instantiate(movementHighlightPrefab, movableCellWorldPositionVector3, Quaternion.identity);
+            movementHighlightGameObjectList.Add(movementHighlightGameObject);
+        }
+    }
+
+    public void UnhighlightMovableCells()
+    {
+        foreach (GameObject movementHighlight in movementHighlightGameObjectList)
+        {
+            Destroy(movementHighlight);
+        }
+        movementHighlightGameObjectList.Clear();
+    }
+
     public void HighlightMovableCellsForUnit(Unit unit)
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
-        SetMovableCellsTranslucency(unit, unitGridPosition, true);
-
+        List<GridPosition> movableCells = GetMovableCells(unitGridPosition, unit.GetMovementRange());
+        HighlightMovableCells(movableCells);
     }
 
-    public void UnhighlightMovableCellsForUnit(Unit unit)
-    {
-        GridPosition unitGridPosition = unit.GetGridPosition();
-        SetMovableCellsTranslucency(unit, unitGridPosition, false);
-    }
+    // public void UnhighlightMovableCellsForUnit(Unit unit)
+    // {
+    //     GridPosition unitGridPosition = unit.GetGridPosition();
+    //     SetMovableCellsTranslucency(unit, unitGridPosition, false);
+    // }
 
     public WorldPosition GetMouseWorldPosition()
     {
@@ -199,7 +243,7 @@ public class Level : MonoBehaviour
         HashSet<GridPosition> movableCells = new();
         Queue<GridPosition> queue = new();
 
-        movableCells.Add(position);
+        // movableCells.Add(position);
         queue.Enqueue(position);
 
         for (int step = 0; step < distance; step++)
@@ -228,7 +272,13 @@ public class Level : MonoBehaviour
                             customTilemapTile.IsWalkable()
                         )
                             {
-                                movableCells.Add(direction);
+
+                                if (direction != position)
+                                {
+                                    movableCells.Add(direction);
+                                }
+
+
                                 queue.Enqueue(direction);
                             }
                         }
@@ -261,7 +311,7 @@ public class Level : MonoBehaviour
 
     public void MoveUnit(Unit unit, GridPosition targetGridPosition)
     {
-        UnhighlightMovableCellsForUnit(unit);
+        UnhighlightMovableCells();
         ClearUnitOnCell(unit.GetGridPosition());
         unit.Move(targetGridPosition);
         HighlightMovableCellsForUnit(unit);
