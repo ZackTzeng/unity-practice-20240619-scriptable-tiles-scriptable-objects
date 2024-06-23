@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        provider = new JsonRpcClient(dojoConfig.rpcUrl);
+        provider = new JsonRpcClient(dojoConfig.RPCURL);
         masterAccount = new Account(provider, new SigningKey(gameManagerData.masterPrivateKey), new FieldElement(gameManagerData.masterAddress));
         burnerManager = new BurnerManager(provider, masterAccount);
 
