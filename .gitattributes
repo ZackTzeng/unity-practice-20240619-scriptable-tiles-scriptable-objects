@@ -70,3 +70,6 @@
 *.meta linguist-generated
 *.prefab linguist-generated
 *.unity linguist-generated
+
+# Dojo-engine specific files
+Assets/Dojo/Plugins/Windows/libdojo_c.dll filter=lfs diff=lfs merge=lfs -text
